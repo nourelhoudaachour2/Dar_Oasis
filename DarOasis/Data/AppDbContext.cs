@@ -12,6 +12,7 @@ namespace DarOasis.Data
         public DbSet<Employe> Employes { get; set; }
         public DbSet<Chambre> Chambres { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Accompagnant> Accompagnants { get; set; }
         public DbSet<Affectation> Affectations { get; set; }
         public DbSet<ServiceSupplementaire> ServicesSupplementaires { get; set; }
         public DbSet<ReservationService> ReservationServices { get; set; }

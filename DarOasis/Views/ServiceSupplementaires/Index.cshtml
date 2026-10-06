@@ -1,0 +1,88 @@
+﻿@model IEnumerable<DarOasis.Models.ServiceSupplementaire>
+
+@{
+    ViewData["Title"] = "Services";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <div>
+        <h1 class="page-title">Gestion des <span>Services</span></h1>
+        <p class="page-subtitle">@Model.Count() service(s) enregistré(s)</p>
+        <div class="title-divider"></div>
+    </div>
+
+    <a href="/ServiceSupplementaires/Create" class="btn btn-primary">
+        + Nouveau service
+    </a>
+</div>
+
+<div class="card" style="padding:0;overflow:hidden;">
+
+    @if (!Model.Any())
+    {
+        <div style="text-align:center;padding:60px 20px;color:#9B7B5A;">
+            <p style="font-size:16px;font-weight:700;">Aucun service enregistré</p>
+            <p style="font-size:13px;">Commencez par ajouter un service supplémentaire.</p>
+        </div>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Nom service</th>
+                    <th style="text-align:center;">Prix</th>
+                    <th style="text-align:center;">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="text-align:center;font-weight:700;color:#5C3317;">
+                            @item.NomService
+                        </td>
+
+                        <td style="text-align:center;font-weight:700;color:#C8922A;">
+                            @item.PrixService.ToString("0.0") TND
+                        </td>
+
+                        <td style="text-align:center;">
+                            <div style="display:flex;gap:6px;justify-content:center;">
+
+                                <a href="/ServiceSupplementaires/Details/@item.IdService"
+                                       class="btn btn-outline"
+                                       style="padding:6px 12px;font-size:12px;">
+                                    Détails
+                                </a>
+
+                                <a href="/ServiceSupplementaires/Edit/@item.IdService"
+                                       class="btn"
+                                       style="padding:6px 12px;font-size:12px;background:#6B7C3E;color:white;border:none;border-radius:12px;text-decoration:none;">
+                                    Modifier
+                                </a>
+
+                                <form asp-action="Delete"
+                                      asp-route-id="@item.IdService"
+                                      method="post"
+                                      style="display:inline;">
+
+                                    <button type="submit"
+                                            onclick="return confirm('Supprimer ce service ?')"
+                                            style="background:#FFF5F2;color:#C45D35;border:1px solid #F0B7A4;padding:6px 12px;border-radius:12px;font-weight:600;cursor:pointer;font-size:12px;">
+                                        Supprimer
+                                    </button>
+
+                                </form>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>

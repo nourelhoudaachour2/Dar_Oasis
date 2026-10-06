@@ -1,0 +1,124 @@
+﻿@model IEnumerable<DarOasis.Models.Facture>
+
+@{
+    ViewData["Title"] = "Factures";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <div>
+        <h1 class="page-title">Gestion des <span>Factures</span></h1>
+        <p class="page-subtitle">@Model.Count() facture(s) générée(s)</p>
+        <div class="title-divider"></div>
+    </div>
+</div>
+
+<div class="card" style="padding:0;overflow:hidden;">
+
+    @if (!Model.Any())
+    {
+        <div style="text-align:center;padding:60px 20px;color:#9B7B5A;">
+            <p style="font-size:16px;font-weight:700;">Aucune facture générée</p>
+            <p style="font-size:13px;">Les factures seront créées automatiquement après les réservations.</p>
+        </div>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">N° Facture</th>
+                    <th style="text-align:center;">Client</th>
+                    <th style="text-align:center;">Date création</th>
+                    <th style="text-align:center;">Échéance</th>
+                    <th style="text-align:center;">Montant total</th>
+                    <th style="text-align:center;">Statut</th>
+                    <th style="text-align:center;">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var statut = item.Statut ?? "Non payé";
+
+                    var isLate =
+                        item.DateEcheance.Date < DateTime.Today
+                        && statut != "Payé";
+
+                    var isSoon =
+                        item.DateEcheance.Date >= DateTime.Today
+                        && item.DateEcheance.Date <= DateTime.Today.AddDays(3)
+                        && statut != "Payé";
+
+                    <tr>
+                        <td style="text-align:center;font-weight:700;color:#5C3317;">
+                            @item.NumeroFacture
+                        </td>
+
+                        <td style="text-align:center;">
+                            @item.Reservation.Client.Nom @item.Reservation.Client.Prenom
+                        </td>
+
+                        <td style="text-align:center;">
+                            @item.DateFacture.ToString("dd/MM/yyyy")
+                        </td>
+
+                        <td style="text-align:center;">
+                            @item.DateEcheance.ToString("dd/MM/yyyy")
+
+                            @if (isLate)
+                            {
+                                <div style="margin-top:5px;color:#C45D35;font-weight:800;font-size:11px;">
+                                    En retard
+                                </div>
+                            }
+                            else if (isSoon)
+                            {
+                                <div style="margin-top:5px;color:#C8922A;font-weight:800;font-size:11px;">
+                                    Échéance proche
+                                </div>
+                            }
+                        </td>
+
+                        <td style="text-align:center;font-weight:800;color:#6B7C3E;">
+                            @item.MontantTotal.ToString("0.0") TND
+                        </td>
+
+                        <td style="text-align:center;">
+                            @if (statut == "Payé")
+                            {
+                                <span style="background:#EBF5DC;color:#4A6B1E;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;">
+                                    Payé
+                                </span>
+                            }
+                            else
+                            {
+                                <span style="background:#FFF0EC;color:#A03A1E;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;">
+                                    Non payé
+                                </span>
+                            }
+                        </td>
+
+                        <td style="text-align:center;">
+                            <div style="display:flex;gap:6px;justify-content:center;">
+                                <a href="/Factures/Details/@item.IdFacture"
+                                       class="btn btn-outline"
+                                       style="padding:6px 12px;font-size:12px;">
+                                    Détails
+                                </a>
+
+                                <a href="/Factures/Edit/@item.IdFacture"
+                                       class="btn"
+                                       style="padding:6px 12px;font-size:12px;background:#6B7C3E;color:white;border:none;border-radius:12px;text-decoration:none;">
+                                    Modifier
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>

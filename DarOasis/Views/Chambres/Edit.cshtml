@@ -1,0 +1,125 @@
+﻿@model DarOasis.Models.Chambre
+
+@{
+    ViewData["Title"] = "Modifier Chambre";
+}
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+
+    <div>
+        <h1 class="page-title">Modifier la <span>Chambre</span></h1>
+        <p class="page-subtitle">
+            Mise à jour des informations de la chambre @Model.Numero
+        </p>
+        <div class="title-divider"></div>
+    </div>
+
+</div>
+
+<div class="card" style="max-width:780px;padding:34px;">
+
+    <form asp-action="Edit">
+
+        <input type="hidden" asp-for="IdChambre" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+            <div>
+                <label asp-for="Numero" class="form-label">Numéro</label>
+                <input asp-for="Numero" class="form-control" />
+                <span asp-validation-for="Numero" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="Type" class="form-label">Type</label>
+                <select asp-for="Type" class="form-control">
+                    <option>simple</option>
+                    <option>double</option>
+                    <option>suite</option>
+                    <option>familiale</option>
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="PrixParNuit" class="form-label">Prix / nuit</label>
+                <input asp-for="PrixParNuit"
+                       type="number"
+                       step="0.1"
+                       value="@Model.PrixParNuit.ToString("0.0").Replace(",", ".")"
+                       class="form-control" />
+                <span asp-validation-for="PrixParNuit" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="Statut" class="form-label">Statut</label>
+                <select asp-for="Statut" class="form-control">
+                    <option>disponible</option>
+                    <option>occupée</option>
+                    <option>nettoyage</option>
+                    <option>maintenance</option>
+                </select>
+                <span asp-validation-for="Statut" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div style="margin-top:22px;">
+            <label asp-for="Note" class="form-label">Note</label>
+            <input asp-for="Note"
+                   type="number"
+                   step="0.1"
+                   value="@Model.Note.ToString("0.0").Replace(",", ".")"
+                   class="form-control" />
+            <span asp-validation-for="Note" class="text-danger"></span>
+        </div>
+
+        <div style="margin-top:22px;background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;margin-bottom:8px;">
+                Employé affecté
+            </div>
+
+            @if (Model.Affectations != null && Model.Affectations.Any())
+            {
+                foreach (var affectation in Model.Affectations.OrderByDescending(a => a.DateAffectation))
+                {
+                    <div style="font-size:15px;color:#3A2010;font-weight:700;margin-bottom:6px;">
+                        @affectation.Employe?.Nom @affectation.Employe?.Prenom
+                        <span style="color:#9B7B5A;font-size:13px;font-weight:600;">
+                            — @affectation.DateAffectation.ToString("dd/MM/yyyy")
+                        </span>
+                    </div>
+                }
+            }
+            else
+            {
+                <div style="font-size:15px;color:#9B7B5A;font-weight:700;">
+                    Aucun employé affecté
+                </div>
+            }
+        </div>
+
+        <div style="margin-top:32px;display:flex;gap:10px;">
+
+            <button type="submit"
+                    style="background:#6B7C3E;color:white;border:none;padding:14px 26px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;">
+                Enregistrer
+            </button>
+
+            <a asp-action="Index" class="btn btn-outline">
+                Annuler
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

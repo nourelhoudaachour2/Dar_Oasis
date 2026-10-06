@@ -1,0 +1,163 @@
+﻿@model DarOasis.ViewModels.Login
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <title>Connexion — Dar Oasis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+    <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: 'Lato', sans-serif;
+                background: url('/images/bg-login.png') center center / cover no-repeat fixed;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .login-card {
+                background: rgba(255, 255, 255, 0.92);
+                backdrop-filter: blur(6px);
+                border-radius: 20px;
+                padding: 48px 40px;
+                width: 440px;
+                border: 1px solid #EDE0C4;
+                box-shadow: 0 8px 40px rgba(92,51,23,.18);
+            }
+
+            .logo-area {
+                text-align: center;
+                margin-bottom: 28px;
+            }
+
+                .logo-area img {
+                    width: 260px;
+                    margin-bottom: 4px;
+                }
+
+            .logo-sub {
+                font-size: 13px;
+                color: #9B7B5A;
+                margin-top: 4px;
+                letter-spacing: .3px;
+            }
+
+            .divider {
+                width: 40px;
+                height: 3px;
+                background: linear-gradient(90deg, #C8922A, #C47A5A);
+                border-radius: 2px;
+                margin: 10px auto 0;
+            }
+
+            label {
+                display: block;
+                font-size: 11px;
+                font-weight: 700;
+                color: #6B4423;
+                text-transform: uppercase;
+                letter-spacing: .8px;
+                margin-bottom: 6px;
+                margin-top: 20px;
+            }
+
+            input {
+                width: 100%;
+                padding: 12px 14px;
+                border: 1.5px solid #EDE0C4;
+                border-radius: 10px;
+                font-size: 14px;
+                font-family: 'Lato', sans-serif;
+                color: #3A2010;
+                background: #FBF8F2;
+                transition: border .2s;
+            }
+
+                input:focus {
+                    outline: none;
+                    border-color: #C8922A;
+                    background: #fff;
+                }
+
+            .error-msg {
+                color: #A03A1E;
+                font-size: 12px;
+                margin-top: 4px;
+                display: block;
+            }
+
+            .btn-login {
+                width: 100%;
+                padding: 14px;
+                background: #5C3317;
+                color: #fff;
+                border: none;
+                border-radius: 12px;
+                font-size: 15px;
+                font-weight: 700;
+                font-family: 'Lato', sans-serif;
+                cursor: pointer;
+                margin-top: 30px;
+                transition: background .2s;
+                letter-spacing: .5px;
+            }
+
+                .btn-login:hover {
+                    background: #8B5A2B;
+                }
+
+            .alert-error {
+                background: rgba(255, 240, 236, 0.95);
+                border: 1px solid #F5C4B3;
+                border-radius: 10px;
+                padding: 10px 14px;
+                font-size: 13px;
+                color: #A03A1E;
+                margin-bottom: 16px;
+            }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+
+        <div class="logo-area">
+            <img src="~/images/logo3.png" alt="Dar Oasis" />
+            <div class="logo-sub">Système de gestion du motel</div>
+            <div class="divider"></div>
+        </div>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert-error">
+                @Html.ValidationSummary(true)
+            </div>
+        }
+
+        <form asp-controller="Auth" asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+
+            <label asp-for="Email">Adresse email</label>
+            <input asp-for="Email" type="email" placeholder="gerant@daroasis.com" />
+            <span asp-validation-for="Email" class="error-msg"></span>
+
+            <label asp-for="MotDePasse">Mot de passe</label>
+            <input asp-for="MotDePasse" type="password" placeholder="••••••••" />
+            <span asp-validation-for="MotDePasse" class="error-msg"></span>
+
+            <button type="submit" class="btn-login">Se connecter</button>
+        </form>
+
+    </div>
+</body>
+</html>

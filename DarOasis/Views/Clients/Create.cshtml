@@ -1,0 +1,111 @@
+﻿@model DarOasis.Models.Client
+
+@{
+    ViewData["Title"] = "Nouveau Client";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+
+    <div>
+        <h1 class="page-title">Nouveau <span>Client</span></h1>
+        <p class="page-subtitle">Ajouter un nouveau client au motel</p>
+        <div class="title-divider"></div>
+    </div>
+
+    <a asp-action="Index" class="btn btn-outline">
+        Retour
+    </a>
+
+</div>
+
+<div class="card" style="max-width:850px;padding:35px;">
+
+    <form asp-action="Create">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+            <div>
+                <label asp-for="Nom" class="form-label">Nom</label>
+                <input asp-for="Nom" class="form-control" />
+                <span asp-validation-for="Nom" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="Prenom" class="form-label">Prénom</label>
+                <input asp-for="Prenom" class="form-control" />
+                <span asp-validation-for="Prenom" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="Telephone" class="form-label">Téléphone</label>
+                <input asp-for="Telephone" class="form-control" />
+                <span asp-validation-for="Telephone" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="Email" class="form-label">Email</label>
+                <input asp-for="Email" type="email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="Nationalite" class="form-label">Nationalité</label>
+                <input asp-for="Nationalite" class="form-control" />
+                <span asp-validation-for="Nationalite" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="TypePieceIdentite" class="form-label">Type pièce identité</label>
+                <select asp-for="TypePieceIdentite" class="form-control">
+                    <option value="">-- Sélectionner --</option>
+                    <option>CIN</option>
+                    <option>Passeport</option>
+                    <option>Carte séjour</option>
+                </select>
+                <span asp-validation-for="TypePieceIdentite" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="NumeroIdentite" class="form-label">Numéro identité</label>
+                <input asp-for="NumeroIdentite"
+                       type="text"
+                       maxlength="8"
+                       pattern="\d{8}"
+                       oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+                       class="form-control" />
+                <span asp-validation-for="NumeroIdentite" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="Adresse" class="form-label">Adresse</label>
+                <input asp-for="Adresse" class="form-control" />
+                <span asp-validation-for="Adresse" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div style="margin-top:32px;display:flex;gap:10px;">
+
+            <button type="submit"
+                    style="background:#7A4419;color:white;border:none;padding:14px 28px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;">
+                + Ajouter le client
+            </button>
+
+            <a asp-action="Index" class="btn btn-outline">
+                Annuler
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

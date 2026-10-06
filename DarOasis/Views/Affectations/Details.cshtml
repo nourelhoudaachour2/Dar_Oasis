@@ -1,0 +1,89 @@
+﻿@model DarOasis.Models.Affectation
+
+@{
+    ViewData["Title"] = "Détails Affectation";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Détails <span>Affectation</span></h1>
+        <p>Informations de l’affectation</p>
+        <div class="title-line"></div>
+    </div>
+</div>
+
+<div class="details-card">
+    <div class="info-box">
+        <span>Date</span>
+        <strong>@Model.DateAffectation.ToString("dd/MM/yyyy")</strong>
+    </div>
+
+    <div class="info-box">
+        <span>Employée</span>
+        <strong>@Model.Employe?.Nom @Model.Employe?.Prenom</strong>
+    </div>
+
+    <div class="info-box">
+        <span>Chambre</span>
+        <strong>Chambre @Model.Chambre?.IdChambre</strong>
+    </div>
+</div>
+
+<div class="buttons">
+    <a asp-action="Index" class="btn-back">Retour</a>
+</div>
+
+<style>
+    .page-header { margin-bottom: 22px; }
+    .page-header h1 { font-size: 28px; font-weight: 800; color: #5b2d10; margin-bottom: 3px; }
+    .page-header h1 span { color: #c9795d; }
+    .page-header p { color: #9b6b45; font-size: 15px; margin-bottom: 8px; }
+    .title-line { width: 65px; height: 4px; background: #c98b2c; border-radius: 20px; }
+
+    .details-card {
+        background: white;
+        border-radius: 20px;
+        border: 1px solid #ead8b8;
+        padding: 22px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 14px;
+        max-width: 850px;
+    }
+
+    .info-box {
+        background: #fffdf9;
+        border: 1px solid #f0e1c8;
+        border-radius: 14px;
+        padding: 14px;
+    }
+
+    .info-box span {
+        display: block;
+        color: #a1723b;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+    }
+
+    .info-box strong {
+        color: #2f1608;
+        font-size: 15px;
+    }
+
+    .buttons {
+        margin-top: 18px;
+    }
+
+    .btn-back {
+        border: 2px solid #6b350f;
+        color: #6b350f;
+        background: white;
+        padding: 8px 20px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+    }
+</style>

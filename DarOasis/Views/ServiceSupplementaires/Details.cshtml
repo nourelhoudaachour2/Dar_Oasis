@@ -1,0 +1,61 @@
+﻿@model DarOasis.Models.ServiceSupplementaire
+
+@{
+    ViewData["Title"] = "Détails service";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h1 class="page-title">Détails <span>Service</span></h1>
+    <p class="page-subtitle">Informations du service supplémentaire</p>
+    <div class="title-divider"></div>
+</div>
+
+<div class="card" style="max-width:700px;">
+
+    <div style="display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:20px;">
+
+        <div>
+            <div class="form-label">
+                Nom du service
+            </div>
+
+            <div class="form-control"
+                 style="background:#F8F3EA;">
+                @Model.NomService
+            </div>
+        </div>
+
+        <div>
+            <div class="form-label">
+                Prix du service
+            </div>
+
+            <div class="form-control"
+                 style="background:#F8F3EA;">
+                @Model.PrixService.ToString("0.0") TND
+            </div>
+        </div>
+
+    </div>
+
+    <div style="margin-top:30px;
+        display:flex;
+        gap:12px;">
+
+        <a href="/ServiceSupplementaires/Edit/@Model.IdService"
+               class="btn"
+               style="background:#6B7C3E;color:white;">
+            Modifier
+        </a>
+
+        <a href="/ServiceSupplementaires/Index"
+               class="btn btn-outline">
+            Retour
+        </a>
+
+    </div>
+
+</div>

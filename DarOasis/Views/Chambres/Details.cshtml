@@ -1,0 +1,117 @@
+﻿@model DarOasis.Models.Chambre
+
+@{
+    ViewData["Title"] = "Détails Chambre";
+
+    var (bg, col) = Model.Statut switch
+    {
+        "disponible" => ("#EBF5DC", "#4A6B1E"),
+        "occupée" => ("#FFF0EC", "#A03A1E"),
+        "réservée" => ("#F5EDD6", "#8B5A2B"),
+        "nettoyage" => ("#EBF0DC", "#4A6B1E"),
+        "maintenance" => ("#F5E8E0", "#C47A5A"),
+        _ => ("#F5EDD6", "#8B5A2B")
+    };
+}
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+    <div>
+        <h1 class="page-title">Détails de la <span>Chambre</span></h1>
+        <p class="page-subtitle">Informations complètes de la chambre numéro @Model.Numero</p>
+        <div class="title-divider"></div>
+    </div>
+</div>
+
+<div class="card" style="max-width:850px;padding:34px;">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+        <div>
+            <div style="font-size:13px;color:#9B7B5A;text-transform:uppercase;font-weight:700;">
+                Numéro de chambre
+            </div>
+
+            <div style="font-size:42px;font-weight:800;color:#5C3317;margin-top:4px;">
+                @Model.Numero
+            </div>
+        </div>
+
+        <span style="background:@bg;color:@col;padding:8px 18px;border-radius:20px;
+            font-size:12px;font-weight:800;text-transform:uppercase;">
+            @Model.Statut
+        </span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;">
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Type</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">@Model.Type</div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Prix / nuit</div>
+            <div style="font-size:18px;color:#C8922A;font-weight:800;margin-top:6px;">
+                @Model.PrixParNuit.ToString("N2") TND
+            </div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Disponibilité</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">
+                @(Model.Disponible ? "Disponible" : "Non disponible")
+            </div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Note</div>
+            <div style="margin-top:6px;">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <span style="color:@(i <= (int)Model.Note ? "#C8922A" : "#EDE0C4");font-size:20px;">★</span>
+                }
+            </div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;grid-column:span 2;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">
+                Employé affecté
+            </div>
+
+            <div style="margin-top:8px;">
+                @if (Model.Affectations != null && Model.Affectations.Any())
+                {
+                    foreach (var affectation in Model.Affectations.OrderByDescending(a => a.DateAffectation))
+                    {
+                        <div style="font-size:16px;color:#3A2010;font-weight:700;margin-bottom:6px;">
+                            @affectation.Employe?.Nom @affectation.Employe?.Prenom
+                            <span style="color:#9B7B5A;font-size:13px;font-weight:600;">
+                                — @affectation.DateAffectation.ToString("dd/MM/yyyy")
+                            </span>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div style="font-size:16px;color:#9B7B5A;font-weight:700;">
+                        Aucun employé affecté
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+
+    <div style="margin-top:28px;display:flex;gap:10px;">
+        <a asp-action="Edit"
+               asp-route-id="@Model.IdChambre"
+               class="btn"
+               style="background:#6B7C3E;color:white;border-radius:12px;">
+            Modifier
+        </a>
+
+        <a asp-action="Index" class="btn btn-outline">
+            Retour à la liste
+        </a>
+    </div>
+
+</div>

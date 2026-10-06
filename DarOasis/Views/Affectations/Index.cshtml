@@ -1,0 +1,225 @@
+﻿@model IEnumerable<DarOasis.Models.Affectation>
+
+@{
+    ViewData["Title"] = "Affectations";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Gestion des <span>Affectations</span></h1>
+        <p>@Model.Count() affectation(s) enregistrée(s)</p>
+        <div class="title-line"></div>
+    </div>
+
+    <a asp-action="Create" class="btn-add">
+        + Nouvelle affectation
+    </a>
+</div>
+
+<div class="table-card">
+
+    <table class="dar-table">
+
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Employée</th>
+                <th>Chambre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @item.DateAffectation.ToString("dd/MM/yyyy")
+                    </td>
+
+                    <td>
+                        <strong>
+                            @item.Employe?.Nom @item.Employe?.Prenom
+                        </strong>
+                    </td>
+
+                    <td>
+                        <span class="room-badge">
+                            Chambre @item.Chambre?.IdChambre
+                        </span>
+                    </td>
+
+                    <td>
+
+                        <div class="actions">
+
+                            <a asp-action="Details"
+                                   asp-route-id="@item.IdAffectation"
+                                   class="btn-details">
+                                Détails
+                            </a>
+
+                            <a asp-action="Edit"
+                                   asp-route-id="@item.IdAffectation"
+                                   class="btn-edit">
+                                Modifier
+                            </a>
+
+                            <form asp-action="Delete"
+                                  asp-route-id="@item.IdAffectation"
+                                  method="post"
+                                  class="delete-form">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="btn-delete">
+                                    Supprimer
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<style>
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 28px;
+    }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #5b2d10;
+            margin-bottom: 4px;
+        }
+
+            .page-header h1 span {
+                color: #c9795d;
+            }
+
+        .page-header p {
+            color: #9b6b45;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+    .title-line {
+        width: 70px;
+        height: 4px;
+        background: #c98b2c;
+        border-radius: 20px;
+    }
+
+    .btn-add {
+        background: #6b350f;
+        color: white;
+        padding: 11px 22px;
+        border-radius: 14px;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid #ead8b8;
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    .dar-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .dar-table thead {
+            background: #fffdf9;
+        }
+
+        .dar-table th {
+            color: #a1723b;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        .dar-table td {
+            padding: 16px;
+            font-size: 15px;
+            color: #2f1608;
+            border-top: 1px solid #f0e1c8;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+    .room-badge {
+        background: #edf4d9;
+        color: #667d2f;
+        padding: 6px 14px;
+        border-radius: 24px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .btn-details,
+    .btn-edit,
+    .btn-delete {
+        padding: 7px 15px;
+        border-radius: 11px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .btn-details {
+        border: 2px solid #6b350f;
+        color: #6b350f;
+        background: white;
+    }
+
+    .btn-edit {
+        background: #7c9141;
+        color: white;
+        border: none;
+    }
+
+    .delete-form {
+        margin: 0;
+    }
+
+    .btn-delete {
+        border: 1px solid #efc3b7;
+        color: #d06645;
+        background: #fff6f2;
+        cursor: pointer;
+    }
+
+</style>

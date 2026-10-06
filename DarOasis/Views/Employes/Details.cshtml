@@ -1,0 +1,193 @@
+﻿@model DarOasis.Models.Employe
+
+@{
+    ViewData["Title"] = "Détails Employé";
+
+    var image = string.IsNullOrEmpty(Model.ImagePath)
+        ? "/images/employes/default.png"
+        : Model.ImagePath;
+}
+
+<div class="page-header">
+    <div>
+        <h1>Détails <span>Employé</span></h1>
+        <p>Informations personnelles et professionnelles</p>
+        <div class="title-line"></div>
+    </div>
+</div>
+
+<div class="details-card">
+
+    <div class="left-side">
+        <img src="@image" class="profile-image" alt="Photo employé" />
+        <h2>@Model.Nom @Model.Prenom</h2>
+        <span class="poste-badge">@Model.Poste</span>
+    </div>
+
+    <div class="right-side">
+        <div class="info-box">
+            <span>Nom</span>
+            <strong>@Model.Nom</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Prénom</span>
+            <strong>@Model.Prenom</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Téléphone</span>
+            <strong>@Model.Telephone</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Email</span>
+            <strong>@Model.Email</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Date naissance</span>
+            <strong>@Model.DateNaissance.ToString("dd/MM/yyyy")</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Date embauche</span>
+            <strong>@Model.DateEmbauche.ToString("dd/MM/yyyy")</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Salaire</span>
+            <strong>@Model.Salaire.ToString("0.00") TND</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Poste</span>
+            <strong>@Model.Poste</strong>
+        </div>
+
+        <div class="info-box full">
+            <span>Adresse</span>
+            <strong>@Model.Adresse</strong>
+        </div>
+
+        <div class="info-box full">
+            <span>Expérience</span>
+            <strong>@Model.Experience</strong>
+        </div>
+    </div>
+
+</div>
+
+<div class="buttons">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">Modifier</a>
+    <a asp-action="Index" class="btn-back">Retour</a>
+</div>
+
+<style>
+    .page-header { margin-bottom: 22px; }
+    .page-header h1 { font-size: 28px; font-weight: 800; color: #5b2d10; margin-bottom: 3px; }
+    .page-header h1 span { color: #c9795d; }
+    .page-header p { color: #9b6b45; font-size: 15px; margin-bottom: 8px; }
+    .title-line { width: 65px; height: 4px; background: #c98b2c; border-radius: 20px; }
+
+    .details-card {
+        background: white;
+        border-radius: 20px;
+        border: 1px solid #ead8b8;
+        padding: 22px;
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        max-width: 980px;
+    }
+
+    .left-side {
+        background: #fffaf2;
+        border-radius: 18px;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid #f0e1c8;
+    }
+
+    .profile-image {
+        width: 95px;
+        height: 95px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #f1dfc1;
+        margin-bottom: 12px;
+    }
+
+    .left-side h2 {
+        color: #5b2d10;
+        font-size: 19px;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .poste-badge {
+        background: #edf4d9;
+        color: #667d2f;
+        padding: 6px 14px;
+        border-radius: 24px;
+        font-size: 12px;
+        font-weight: 700;
+        display: inline-block;
+    }
+
+    .right-side {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .info-box {
+        background: #fffdf9;
+        border: 1px solid #f0e1c8;
+        border-radius: 14px;
+        padding: 14px;
+    }
+
+    .full { grid-column: span 2; }
+
+    .info-box span {
+        display: block;
+        color: #a1723b;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+    }
+
+    .info-box strong {
+        color: #2f1608;
+        font-size: 15px;
+    }
+
+    .buttons {
+        margin-top: 18px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-edit {
+        background: #7c9141;
+        color: white;
+        padding: 9px 20px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .btn-back {
+        border: 2px solid #6b350f;
+        color: #6b350f;
+        background: white;
+        padding: 8px 20px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+    }
+</style>

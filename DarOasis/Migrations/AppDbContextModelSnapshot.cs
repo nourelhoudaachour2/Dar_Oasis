@@ -17,10 +17,39 @@ namespace DarOasis.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.23")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("DarOasis.Models.Accompagnant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateNaissance")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Prenom")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReservationId");
+
+                    b.ToTable("Accompagnants");
+                });
 
             modelBuilder.Entity("DarOasis.Models.Affectation", b =>
                 {
@@ -59,6 +88,9 @@ namespace DarOasis.Migrations
                     b.Property<bool>("Disponible")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<decimal>("Note")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<string>("Numero")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -66,6 +98,10 @@ namespace DarOasis.Migrations
                     b.Property<decimal>("PrixParNuit")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("Statut")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -100,8 +136,9 @@ namespace DarOasis.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("NumeroIdentite")
-                        .HasColumnType("int");
+                    b.Property<string>("NumeroIdentite")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Prenom")
                         .IsRequired()
@@ -128,11 +165,32 @@ namespace DarOasis.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Adresse")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DateEmbauche")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateNaissance")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Experience")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Poste")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -140,9 +198,8 @@ namespace DarOasis.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<decimal>("Salaire")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Telephone")
                         .IsRequired()
@@ -161,6 +218,9 @@ namespace DarOasis.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdFacture"));
 
+                    b.Property<DateTime>("DateEcheance")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("DateFacture")
                         .HasColumnType("datetime(6)");
 
@@ -176,8 +236,22 @@ namespace DarOasis.Migrations
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<string>("NumeroFacture")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("PenaliteRetard")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("Promotion")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<int>("ReservationId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Statut")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("IdFacture");
 
@@ -208,6 +282,9 @@ namespace DarOasis.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("NombreJours")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NombrePersonnes")
                         .HasColumnType("int");
 
                     b.Property<decimal>("PrixTotal")
@@ -282,6 +359,9 @@ namespace DarOasis.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("EmployeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("MotDePasse")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -296,7 +376,20 @@ namespace DarOasis.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeId");
+
                     b.ToTable("Utilisateurs");
+                });
+
+            modelBuilder.Entity("DarOasis.Models.Accompagnant", b =>
+                {
+                    b.HasOne("DarOasis.Models.Reservation", "Reservation")
+                        .WithMany("Accompagnants")
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Reservation");
                 });
 
             modelBuilder.Entity("DarOasis.Models.Affectation", b =>
@@ -367,6 +460,15 @@ namespace DarOasis.Migrations
                     b.Navigation("ServiceSupplementaire");
                 });
 
+            modelBuilder.Entity("DarOasis.Models.Utilisateur", b =>
+                {
+                    b.HasOne("DarOasis.Models.Employe", "Employe")
+                        .WithMany()
+                        .HasForeignKey("EmployeId");
+
+                    b.Navigation("Employe");
+                });
+
             modelBuilder.Entity("DarOasis.Models.Chambre", b =>
                 {
                     b.Navigation("Affectations");
@@ -386,6 +488,8 @@ namespace DarOasis.Migrations
 
             modelBuilder.Entity("DarOasis.Models.Reservation", b =>
                 {
+                    b.Navigation("Accompagnants");
+
                     b.Navigation("Facture");
 
                     b.Navigation("ReservationServices");

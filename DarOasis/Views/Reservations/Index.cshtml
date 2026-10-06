@@ -1,0 +1,135 @@
+﻿@model IEnumerable<DarOasis.Models.Reservation>
+
+@{
+    ViewData["Title"] = "Réservations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <div>
+        <h1 class="page-title">Gestion des <span>Réservations</span></h1>
+        <p class="page-subtitle">@Model.Count() réservation(s) enregistrée(s)</p>
+        <div class="title-divider"></div>
+    </div>
+
+    <a href="/Reservations/Create" class="btn btn-primary">
+        + Nouvelle réservation
+    </a>
+</div>
+
+<form asp-action="Index" method="get" style="margin-bottom:18px;">
+    <div style="display:flex;gap:10px;align-items:center;">
+        <input type="text"
+               name="cin"
+               value="@ViewBag.CinRecherche"
+               maxlength="8"
+               placeholder="Rechercher par CIN"
+               class="form-control"
+               style="max-width:260px;" />
+
+        <button type="submit"
+                style="background:#7A4419;color:white;border:none;padding:12px 22px;border-radius:12px;font-weight:700;cursor:pointer;">
+            Rechercher
+        </button>
+
+        <a href="/Reservations/Index"
+               class="btn btn-outline">
+            Réinitialiser
+        </a>
+    </div>
+</form>
+
+<div class="card" style="padding:0;overflow:hidden;">
+
+    @if (!Model.Any())
+    {
+        <div style="text-align:center;padding:60px 20px;color:#9B7B5A;">
+            <p style="font-size:16px;font-weight:700;">Aucune réservation trouvée</p>
+            <p style="font-size:13px;">Essayez un autre CIN ou ajoutez une nouvelle réservation.</p>
+        </div>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Client</th>
+                    <th style="text-align:center;">CIN</th>
+                    <th style="text-align:center;">Chambre</th>
+                    <th style="text-align:center;">Date début</th>
+                    <th style="text-align:center;">Date fin</th>
+                    <th style="text-align:center;">Jours</th>
+                    <th style="text-align:center;">Prix total</th>
+                    <th style="text-align:center;">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="text-align:center;font-weight:700;color:#5C3317;">
+                            @item.Client.Nom @item.Client.Prenom
+                        </td>
+
+                        <td style="text-align:center;">
+                            @item.Client.NumeroIdentite
+                        </td>
+
+                        <td style="text-align:center;font-weight:700;color:#C8922A;">
+                            @item.Chambre.Numero
+                        </td>
+
+                        <td style="text-align:center;">
+                            @item.DateDebut.ToString("dd/MM/yyyy")
+                        </td>
+
+                        <td style="text-align:center;">
+                            @item.DateFin.ToString("dd/MM/yyyy")
+                        </td>
+
+                        <td style="text-align:center;">
+                            @item.NombreJours
+                        </td>
+
+                        <td style="text-align:center;font-weight:700;color:#6B7C3E;">
+                            @item.PrixTotal.ToString("0.0") TND
+                        </td>
+
+                        <td style="text-align:center;">
+                            <div style="display:flex;gap:6px;justify-content:center;">
+
+                                <a href="/Reservations/Details/@item.IdReservation"
+                                       class="btn btn-outline"
+                                       style="padding:6px 12px;font-size:12px;">
+                                    Détails
+                                </a>
+
+                                <a href="/Reservations/Edit/@item.IdReservation"
+                                       class="btn"
+                                       style="padding:6px 12px;font-size:12px;background:#6B7C3E;color:white;border:none;border-radius:12px;text-decoration:none;">
+                                    Modifier
+                                </a>
+
+                                <form asp-action="Delete"
+                                      asp-route-id="@item.IdReservation"
+                                      method="post"
+                                      style="display:inline;">
+
+                                    <button type="submit"
+                                            onclick="return confirm('Supprimer cette réservation ?')"
+                                            style="background:#FFF5F2;color:#C45D35;border:1px solid #F0B7A4;padding:6px 12px;border-radius:12px;font-weight:600;cursor:pointer;font-size:12px;">
+                                        Supprimer
+                                    </button>
+
+                                </form>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>

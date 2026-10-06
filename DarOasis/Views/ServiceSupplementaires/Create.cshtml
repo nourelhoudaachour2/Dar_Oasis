@@ -1,0 +1,49 @@
+﻿@model DarOasis.Models.ServiceSupplementaire
+
+@{
+    ViewData["Title"] = "Nouveau service";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h1 class="page-title">Nouveau <span>Service</span></h1>
+    <p class="page-subtitle">Ajouter un service supplémentaire</p>
+    <div class="title-divider"></div>
+</div>
+
+<div class="card" style="max-width:700px;">
+
+    <form asp-action="Create" method="post">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <label class="form-label">Nom du service</label>
+        <input asp-for="NomService" class="form-control" />
+        <span asp-validation-for="NomService" class="text-danger"></span>
+
+        <label class="form-label">Prix du service (TND)</label>
+        <input asp-for="PrixService"
+               type="number"
+               step="any"
+               class="form-control" />
+        <span asp-validation-for="PrixService" class="text-danger"></span>
+
+        <div style="margin-top:30px;display:flex;gap:12px;">
+            <button type="submit" class="btn btn-primary">
+                + Ajouter
+            </button>
+
+            <a href="/ServiceSupplementaires/Index" class="btn btn-outline">
+                Annuler
+            </a>
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

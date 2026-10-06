@@ -1,0 +1,137 @@
+﻿@model IEnumerable<DarOasis.Models.Client>
+
+@{
+    ViewData["Title"] = "Clients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+
+    <div>
+        <h1 class="page-title">Gestion des <span>Clients</span></h1>
+
+        <p class="page-subtitle">
+            @Model.Count() client(s) enregistré(s)
+        </p>
+
+        <div class="title-divider"></div>
+    </div>
+
+    <a href="/Clients/Create" class="btn btn-primary">
+        + Nouveau client
+    </a>
+
+</div>
+
+<div class="card" style="padding:0;overflow:hidden;">
+
+    @if (!Model.Any())
+    {
+        <div style="text-align:center;padding:60px 20px;color:#9B7B5A;">
+            <p style="font-size:16px;font-weight:700;">
+                Aucun client enregistré
+            </p>
+
+            <p style="font-size:13px;">
+                Commencez par ajouter votre premier client.
+            </p>
+        </div>
+    }
+    else
+    {
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Nom</th>
+                    <th style="text-align:center;">Prénom</th>
+                    <th style="text-align:center;">CIN</th>
+                    <th style="text-align:center;">Téléphone</th>
+                    <th style="text-align:center;">Nationalité</th>
+                    <th style="text-align:center;">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td style="text-align:center;font-weight:700;color:#5C3317;">
+                            @item.Nom
+                        </td>
+
+                        <td style="text-align:center;">
+                            @item.Prenom
+                        </td>
+
+                        <td style="text-align:center;font-weight:600;">
+                            @item.NumeroIdentite
+                        </td>
+
+                        <td style="text-align:center;">
+                            @item.Telephone
+                        </td>
+
+                        <td style="text-align:center;">
+                            @item.Nationalite
+                        </td>
+
+                        <td style="text-align:center;">
+
+                            <div style="display:flex;gap:6px;justify-content:center;">
+
+                                <a href="/Clients/Details/@item.Id"
+                                       class="btn btn-outline"
+                                       style="padding:6px 12px;font-size:12px;">
+                                    Détails
+                                </a>
+
+                                <a href="/Clients/Edit/@item.Id"
+                                       class="btn"
+                                       style="
+                                    padding:6px 12px;
+                                    font-size:12px;
+                                    background:#6B7C3E;
+                                    color:white;
+                                    border:none;
+                                    border-radius:12px;
+                                    text-decoration:none;">
+                                    Modifier
+                                </a>
+
+                                <form asp-action="Delete"
+                                      asp-route-id="@item.Id"
+                                      method="post"
+                                      style="display:inline;">
+
+                                    <button type="submit"
+                                            onclick="return confirm('Supprimer ce client ?')"
+                                            style="
+                                        background:#FFF5F2;
+                                        color:#C45D35;
+                                        border:1px solid #F0B7A4;
+                                        padding:6px 12px;
+                                        border-radius:12px;
+                                        font-weight:600;
+                                        cursor:pointer;
+                                        font-size:12px;">
+                                        Supprimer
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    }
+
+</div>

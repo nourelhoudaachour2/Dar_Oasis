@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+﻿
 
 namespace DarOasis.Models
 {
@@ -9,7 +9,7 @@ namespace DarOasis.Models
         public DateTime DateFin { get; set; }
         public int NombreJours { get; set; }
         public decimal PrixTotal { get; set; }
-
+        public int NombrePersonnes { get; set; }
         public int ClientId { get; set; }
         public Client? Client { get; set; }
 
@@ -19,6 +19,6 @@ namespace DarOasis.Models
        
         public Facture? Facture { get; set; }
         public ICollection<ReservationService> ReservationServices { get; set; } = new List<ReservationService>();
-
+        public ICollection<Accompagnant> Accompagnants { get; set; } = new List<Accompagnant>();
     }
 }

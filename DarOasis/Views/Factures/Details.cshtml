@@ -1,0 +1,356 @@
+﻿@model DarOasis.Models.Facture
+
+@{
+    ViewData["Title"] = "Facture";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool enRetard =
+        Model.DateEcheance.Date < DateTime.Today
+        && Model.Statut != "Payé";
+
+    bool proche =
+        Model.DateEcheance.Date >= DateTime.Today
+        && Model.DateEcheance.Date <= DateTime.Today.AddDays(3)
+        && Model.Statut != "Payé";
+}
+
+<div style="display:flex;justify-content:center;padding:30px;">
+
+    <div style="background:white;
+        width:100%;
+        max-width:1000px;
+        border-radius:24px;
+        padding:50px;
+        box-shadow:0 8px 40px rgba(0,0,0,0.08);">
+
+        <div style="display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border-bottom:2px dashed #E7D7B5;
+            padding-bottom:25px;
+            margin-bottom:30px;">
+
+            <div>
+                <h1 style="font-size:42px;
+                    color:#7A4419;
+                    margin:0;
+                    font-weight:900;">
+                    DAR OASIS
+                </h1>
+
+                <p style="color:#9B7B5A;
+                    margin-top:6px;
+                    font-weight:600;">
+                    Facture officielle hôtel
+                </p>
+            </div>
+
+            <div style="text-align:right;">
+
+                <div style="font-size:14px;
+                    color:#9B7B5A;
+                    font-weight:700;">
+                    FACTURE N°
+                </div>
+
+                <div style="font-size:26px;
+                    color:#5C3317;
+                    font-weight:900;">
+                    @Model.NumeroFacture
+                </div>
+
+            </div>
+
+        </div>
+
+        @if (enRetard)
+        {
+            <div style="background:#FFF0EC;
+                border:1px solid #F0B7A4;
+                color:#B5451F;
+                padding:14px 18px;
+                border-radius:14px;
+                margin-bottom:24px;
+                font-weight:700;">
+
+                Facture en retard — pénalité appliquée.
+
+            </div>
+        }
+        else if (proche)
+        {
+            <div style="background:#FFF8E7;
+                border:1px solid #F2D38B;
+                color:#A07000;
+                padding:14px 18px;
+                border-radius:14px;
+                margin-bottom:24px;
+                font-weight:700;">
+
+                Attention : échéance proche.
+
+            </div>
+        }
+
+        <div style="display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:18px;
+            margin-bottom:35px;">
+
+            <div class="card">
+
+                <div style="font-size:13px;
+                    color:#9B7B5A;
+                    font-weight:700;">
+                    CLIENT
+                </div>
+
+                <div style="font-size:22px;
+                    color:#3A2010;
+                    font-weight:800;
+                    margin-top:8px;">
+
+                    @Model.Reservation.Client.Nom
+                    @Model.Reservation.Client.Prenom
+
+                </div>
+
+                <div style="margin-top:8px;color:#7B6A58;">
+                    CIN :
+                    @Model.Reservation.Client.NumeroIdentite
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <div style="font-size:13px;
+                    color:#9B7B5A;
+                    font-weight:700;">
+                    INFORMATIONS FACTURE
+                </div>
+
+                <div style="margin-top:10px;">
+                    <strong>Date création :</strong>
+                    @Model.DateFacture.ToString("dd/MM/yyyy")
+                </div>
+
+                <div style="margin-top:8px;">
+                    <strong>Date échéance :</strong>
+                    @Model.DateEcheance.ToString("dd/MM/yyyy")
+                </div>
+
+                <div style="margin-top:8px;">
+                    <strong>Statut :</strong>
+
+                    @if (Model.Statut == "Payé")
+                    {
+                        <span style="color:#4A6B1E;font-weight:800;">
+                            Payé
+                        </span>
+                    }
+                    else
+                    {
+                        <span style="color:#B5451F;font-weight:800;">
+                            Non payé
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card" style="margin-bottom:30px;">
+
+            <h2 style="color:#5C3317;margin-bottom:20px;">
+                Détails séjour
+            </h2>
+
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th>Chambre</th>
+                        <th>Type</th>
+                        <th>Début</th>
+                        <th>Fin</th>
+                        <th>Jours</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>@Model.Reservation.Chambre.Numero</td>
+
+                        <td>@Model.Reservation.Chambre.Type</td>
+
+                        <td>
+                            @Model.Reservation.DateDebut.ToString("dd/MM/yyyy")
+                        </td>
+
+                        <td>
+                            @Model.Reservation.DateFin.ToString("dd/MM/yyyy")
+                        </td>
+
+                        <td>@Model.Reservation.NombreJours</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="card" style="margin-bottom:30px;">
+
+            <h2 style="color:#5C3317;margin-bottom:20px;">
+                Services supplémentaires
+            </h2>
+
+            @if (Model.Reservation.ReservationServices != null
+                && Model.Reservation.ReservationServices.Any())
+            {
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Prix / jour</th>
+                            <th>Jours</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var rs in Model.Reservation.ReservationServices)
+                        {
+                            <tr>
+
+                                <td>
+                                    @(rs.ServiceSupplementaire?.NomService ?? "Service supprimé")
+                                </td>
+
+                                <td>
+                                    @((rs.ServiceSupplementaire?.PrixService ?? 0).ToString("0.0")) TND
+                                </td>
+
+                                <td>
+                                    @rs.Quantite
+                                </td>
+
+                                <td>
+
+                                    @(((rs.ServiceSupplementaire?.PrixService ?? 0) * rs.Quantite).ToString("0.0"))
+                                    TND
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+            }
+            else
+            {
+                <p>Aucun service supplémentaire.</p>
+            }
+
+        </div>
+
+        <div style="margin-left:auto;
+            width:360px;">
+
+            <div style="display:flex;
+                justify-content:space-between;
+                margin-bottom:12px;">
+
+                <span>Séjour :</span>
+
+                <strong>
+                    @Model.MontantSejour.ToString("0.0") TND
+                </strong>
+
+            </div>
+
+            <div style="display:flex;
+                justify-content:space-between;
+                margin-bottom:12px;">
+
+                <span>Services :</span>
+
+                <strong>
+                    @Model.MontantServices.ToString("0.0") TND
+                </strong>
+
+            </div>
+
+            <div style="display:flex;
+                justify-content:space-between;
+                margin-bottom:12px;">
+
+                <span>Promotion fidélité :</span>
+
+                <strong style="color:#4A6B1E;">
+                    - @Model.Promotion.ToString("0.0") TND
+                </strong>
+
+            </div>
+
+            <div style="display:flex;
+                justify-content:space-between;
+                margin-bottom:12px;">
+
+                <span>Pénalité retard :</span>
+
+                <strong style="color:#B5451F;">
+                    + @Model.PenaliteRetard.ToString("0.0") TND
+                </strong>
+
+            </div>
+
+            <hr />
+
+            <div style="display:flex;
+                justify-content:space-between;
+                font-size:24px;
+                color:#7A4419;
+                font-weight:900;">
+
+                <span>TOTAL</span>
+
+                <span>
+                    @Model.MontantTotal.ToString("0.0") TND
+                </span>
+
+            </div>
+
+        </div>
+
+        <div style="margin-top:45px;
+            display:flex;
+            gap:12px;">
+
+            <a href="/Factures/Edit/@Model.IdFacture"
+                   class="btn"
+                   style="background:#6B7C3E;color:white;">
+
+                Modifier
+
+            </a>
+
+            <a href="/Factures/Index"
+                   class="btn btn-outline">
+
+                Retour
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

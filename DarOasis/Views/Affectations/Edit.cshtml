@@ -1,0 +1,196 @@
+﻿@model DarOasis.Models.Affectation
+
+@{
+    ViewData["Title"] = "Modifier Affectation";
+
+    var selectedChambres = ViewBag.SelectedChambres as List<int> ?? new List<int>();
+}
+
+<div class="page-header">
+    <div>
+        <h1>Modifier <span>Affectation</span></h1>
+        <p>Modifier les chambres affectées à une femme de ménage</p>
+        <div class="title-line"></div>
+    </div>
+</div>
+
+<div class="form-card">
+    <form asp-action="Edit" method="post">
+
+        <input type="hidden" name="IdAffectation" value="@Model.IdAffectation" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Femme de ménage</label>
+
+                <select name="EmployeId" class="form-control">
+                    <option value="">-- Sélectionner --</option>
+
+                    @foreach (var emp in ViewBag.Employes)
+                    {
+                        if (Model.EmployeId == emp.Id)
+                        {
+                            <option value="@emp.Id" selected>
+                                @emp.Nom @emp.Prenom
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@emp.Id">
+                                @emp.Nom @emp.Prenom
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Date affectation</label>
+
+                <input name="DateAffectation"
+                       type="date"
+                       class="form-control"
+                       value="@Model.DateAffectation.ToString("yyyy-MM-dd")" />
+            </div>
+
+            <div class="form-group full-width">
+                <label>Chambres</label>
+
+                <select name="ChambreIds"
+                        class="form-control multi-select"
+                        multiple>
+
+                    @foreach (var chambre in ViewBag.Chambres)
+                    {
+                        if (selectedChambres.Contains(chambre.IdChambre))
+                        {
+                            <option value="@chambre.IdChambre" selected>
+                                Chambre @chambre.IdChambre
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@chambre.IdChambre">
+                                Chambre @chambre.IdChambre
+                            </option>
+                        }
+                    }
+
+                </select>
+
+                <small>Maintenir Ctrl pour choisir plusieurs chambres.</small>
+            </div>
+
+        </div>
+
+        <div class="buttons">
+            <button type="submit" class="btn-save">Enregistrer</button>
+            <a asp-action="Index" class="btn-back">Retour</a>
+        </div>
+
+    </form>
+</div>
+
+<style>
+    .page-header {
+        margin-bottom: 22px;
+    }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #5b2d10;
+            margin-bottom: 3px;
+        }
+
+            .page-header h1 span {
+                color: #c9795d;
+            }
+
+        .page-header p {
+            color: #9b6b45;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+    .title-line {
+        width: 65px;
+        height: 4px;
+        background: #c98b2c;
+        border-radius: 20px;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 24px;
+        border: 1px solid #ead8b8;
+        max-width: 850px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .full-width {
+        grid-column: span 2;
+    }
+
+    .form-group label {
+        font-weight: 700;
+        color: #6b350f;
+        margin-bottom: 6px;
+        display: block;
+        font-size: 14px;
+    }
+
+    .form-control {
+        height: 44px;
+        border-radius: 13px;
+        border: 1px solid #e4cfac;
+        padding: 10px 14px;
+        font-size: 14px;
+        box-shadow: none !important;
+    }
+
+    .multi-select {
+        height: 130px;
+    }
+
+    small {
+        color: #9b6b45;
+        font-size: 13px;
+    }
+
+    .buttons {
+        margin-top: 22px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-save {
+        background: #7c9141;
+        color: white;
+        border: none;
+        padding: 9px 20px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .btn-back {
+        border: 2px solid #6b350f;
+        color: #6b350f;
+        background: white;
+        padding: 8px 20px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+    }
+</style>

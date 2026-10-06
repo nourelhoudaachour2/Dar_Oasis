@@ -1,0 +1,248 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    var caParMois = ViewBag.CAParMois as decimal[];
+    var mois = new[] { "Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc" };
+}
+
+<!-- HEADER -->
+<div style="margin-bottom:28px;">
+    <div style="font-size:32px;font-weight:700;color:#5C3317;line-height:1.2;">
+        Bienvenue, <span style="color:#C8922A;">@Context.Session.GetString("UserNom")</span>
+    </div>
+
+    <div style="font-size:14px;color:#9B7B5A;margin-top:6px;">
+        Tableau de bord
+    </div>
+
+    <div class="title-divider"></div>
+</div>
+
+<!-- KPI CARDS -->
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px;">
+
+    <!-- Clients -->
+    <div class="card" style="border-top:4px solid #5C3317;text-align:center;">
+        <div style="width:38px;height:38px;border-radius:10px;background:#F0E8DC;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5C3317" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+            </svg>
+        </div>
+
+        <div style="font-size:32px;font-weight:700;color:#5C3317;">
+            @ViewBag.TotalClients
+        </div>
+
+        <div style="font-size:11px;color:#9B7B5A;margin-top:4px;text-transform:uppercase;letter-spacing:.6px;">
+            Total clients
+        </div>
+    </div>
+
+    <!-- Chambres -->
+    <div class="card" style="border-top:4px solid #6B7C3E;text-align:center;">
+        <div style="width:38px;height:38px;border-radius:10px;background:#EBF0DC;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7C3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+        </div>
+
+        <div style="font-size:32px;font-weight:700;color:#6B7C3E;">
+            @ViewBag.TotalChambres
+        </div>
+
+        <div style="font-size:11px;color:#9B7B5A;margin-top:4px;text-transform:uppercase;letter-spacing:.6px;">
+            Chambres
+        </div>
+
+        <div style="margin-top:8px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+            <span style="font-size:10px;background:#EBF0DC;color:#4A6B1E;padding:2px 7px;border-radius:10px;font-weight:700;">
+                @ViewBag.ChambresDisponibles dispo
+            </span>
+
+            <span style="font-size:10px;background:#F5E8E0;color:#A03A1E;padding:2px 7px;border-radius:10px;font-weight:700;">
+                @ViewBag.ChambresOccupees occ.
+            </span>
+        </div>
+    </div>
+
+    <!-- Taux occupation -->
+    <div class="card" style="border-top:4px solid #C8922A;text-align:center;">
+        <div style="width:38px;height:38px;border-radius:10px;background:#F5EED8;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8922A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+            </svg>
+        </div>
+
+        <div style="font-size:32px;font-weight:700;color:#C8922A;">
+            @ViewBag.TauxOccupation<span style="font-size:16px;">%</span>
+        </div>
+
+        <div style="font-size:11px;color:#9B7B5A;margin-top:4px;text-transform:uppercase;letter-spacing:.6px;">
+            Taux d'occupation
+        </div>
+
+        <div style="margin-top:8px;background:#F5EED8;border-radius:10px;height:6px;">
+            <div style="background:#C8922A;height:6px;border-radius:10px;width:@(ViewBag.TauxOccupation)%;"></div>
+        </div>
+    </div>
+
+    <!-- CA -->
+    <div class="card" style="border-top:4px solid #C47A5A;text-align:center;">
+        <div style="width:38px;height:38px;border-radius:10px;background:#F5E8E0;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:14px;font-weight:800;color:#C47A5A;">
+            TND
+        </div>
+
+        <div style="font-size:32px;font-weight:700;color:#C47A5A;">
+            @ViewBag.CAMoisActuel.ToString("N0")
+        </div>
+
+        <div style="font-size:11px;color:#9B7B5A;margin-top:4px;text-transform:uppercase;letter-spacing:.6px;">
+            CA ce mois
+        </div>
+    </div>
+
+    <!-- Employés -->
+    <div class="card" style="border-top:4px solid #8B5A2B;text-align:center;">
+        <div style="width:38px;height:38px;border-radius:10px;background:#F0E8DC;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="7" r="4" />
+                <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                <path d="M21 21v-2a4 4 0 0 0-3-3.85" />
+            </svg>
+        </div>
+
+        <div style="font-size:32px;font-weight:700;color:#8B5A2B;">
+            @ViewBag.TotalEmployes
+        </div>
+
+        <div style="font-size:11px;color:#9B7B5A;margin-top:4px;text-transform:uppercase;letter-spacing:.6px;">
+            Employés
+        </div>
+    </div>
+
+</div>
+
+<!-- TOP CLIENTS + TOP PERIODES -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+
+    <!-- TOP 5 CLIENTS -->
+    <div class="card">
+
+        <div style="font-size:14px;font-weight:700;color:#5C3317;margin-bottom:18px;display:flex;align-items:center;gap:8px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#6B7C3E;"></div>
+            TOP 5 CLIENTS (@DateTime.Now.Year)
+        </div>
+
+        @{
+            var top5 = ViewBag.Top5Clients as dynamic;
+            int rank = 1;
+        }
+
+        @if (top5 != null)
+        {
+            foreach (var item in top5)
+            {
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #F5EDD6;">
+
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <div style="width:24px;height:24px;border-radius:50%;background:#6B7C3E;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">
+                            @rank
+                        </div>
+
+                        <div>
+                            <div style="font-size:13px;font-weight:700;color:#3A2010;">
+                                @item.Client.Nom @item.Client.Prenom
+                            </div>
+
+                            <div style="font-size:11px;color:#9B7B5A;">
+                                @item.NbReservations réservation(s)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="font-size:12px;font-weight:700;color:#6B7C3E;">
+                        @item.TotalPaye.ToString("N0") TND
+                    </div>
+
+                </div>
+
+                rank++;
+            }
+        }
+        else
+        {
+            <div style="font-size:13px;color:#9B7B5A;text-align:center;padding:20px 0;">
+                Aucune donnée disponible
+            </div>
+        }
+
+    </div>
+
+    <!-- TOP PERIODES -->
+    <div class="card">
+
+        <div style="font-size:14px;font-weight:700;color:#5C3317;margin-bottom:18px;display:flex;align-items:center;gap:8px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#C8922A;"></div>
+            TOP PÉRIODE (@DateTime.Now.Year)
+        </div>
+
+        @{
+            var topMois = ViewBag.TopMois as dynamic;
+
+            var nomsMois = new[]
+            {
+                "Janvier","Février","Mars","Avril","Mai","Juin",
+                "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
+            };
+
+            int totalReservations = 0;
+
+            if (topMois != null)
+            {
+                foreach (var t in topMois)
+                {
+                    totalReservations += t.Count;
+                }
+            }
+        }
+
+        @if (topMois != null)
+        {
+            foreach (var t in topMois)
+            {
+                var pourcentage =
+                    totalReservations > 0
+                    ? (int)Math.Round((double)t.Count / totalReservations * 100)
+                    : 0;
+
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #F5EDD6;">
+
+                    <div>
+                        <div style="font-size:14px;font-weight:700;color:#3A2010;">
+                            @nomsMois[t.Mois - 1]
+                        </div>
+
+                        <div style="font-size:11px;color:#9B7B5A;margin-top:3px;">
+                            @t.Count réservations
+                        </div>
+                    </div>
+
+                    <div style="font-size:18px;font-weight:800;color:#C8922A;">
+                        @pourcentage%
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div style="font-size:13px;color:#9B7B5A;text-align:center;padding:20px 0;">
+                Aucune donnée disponible
+            </div>
+        }
+
+    </div>
+
+</div>

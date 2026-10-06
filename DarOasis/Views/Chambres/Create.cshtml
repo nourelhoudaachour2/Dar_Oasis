@@ -1,0 +1,143 @@
+﻿@model DarOasis.Models.Chambre
+
+@{
+    ViewData["Title"] = "Nouvelle Chambre";
+}
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+
+    <div>
+        <div style="font-size:40px;font-weight:700;color:#5C3317;">
+            Nouvelle <span style="color:#C8922A;">Chambre</span>
+        </div>
+
+        <div style="font-size:15px;color:#9B7B5A;margin-top:6px;">
+            Ajouter une nouvelle chambre au motel
+        </div>
+
+        <div class="title-divider"></div>
+    </div>
+
+    <a asp-action="Index"
+           style="background:#fff;
+        border:1px solid #E5D3B3;
+        color:#7A4A21;
+        padding:12px 18px;
+        border-radius:12px;
+        text-decoration:none;
+        font-weight:600;">
+         Retour
+    </a>
+
+</div>
+
+<div class="card" style="max-width:750px;padding:35px;">
+
+    <form asp-action="Create">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+            <!-- NUMERO -->
+            <div>
+                <label asp-for="Numero" class="form-label">
+                    Numéro
+                </label>
+
+                <input asp-for="Numero" class="form-control" />
+
+                <span asp-validation-for="Numero" class="text-danger"></span>
+            </div>
+
+            <!-- TYPE -->
+            <div>
+                <label asp-for="Type" class="form-label">
+                    Type
+                </label>
+
+                <select asp-for="Type" class="form-control">
+                    <option value="">-- Sélectionner --</option>
+                    <option>simple</option>
+                    <option>double</option>
+                    <option>suite</option>
+                    <option>familiale</option>
+                </select>
+
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <!-- PRIX -->
+            <div>
+                <label asp-for="PrixParNuit" class="form-label">
+                    Prix / nuit
+                </label>
+
+                <input asp-for="PrixParNuit"
+                       type="text"
+                       class="form-control" />
+
+                <span asp-validation-for="PrixParNuit" class="text-danger"></span>
+            </div>
+
+            <!-- STATUT -->
+            <div>
+                <label asp-for="Statut" class="form-label">
+                    Statut
+                </label>
+
+                <select asp-for="Statut" class="form-control">
+                    <option value="">-- Sélectionner --</option>
+                    <option>disponible</option>
+                    <option>occupée</option>
+                    <option>nettoyage</option>
+                    <option>maintenance</option>
+                </select>
+
+                <span asp-validation-for="Statut" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <!-- NOTE -->
+        <div style="margin-top:20px;">
+
+            <label asp-for="Note" class="form-label">
+                Note
+            </label>
+
+            <input asp-for="Note"
+                   type="text"
+                   value="0.0"
+                   class="form-control" />
+
+            <span asp-validation-for="Note" class="text-danger"></span>
+
+        </div>
+
+        <!-- BUTTON -->
+        <div style="margin-top:30px;">
+
+            <button type="submit"
+                    style="background:#7A4419;
+                color:white;
+                border:none;
+                padding:14px 30px;
+                border-radius:14px;
+                font-size:15px;
+                font-weight:700;
+                cursor:pointer;">
+                + Ajouter la chambre
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

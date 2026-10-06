@@ -1,0 +1,125 @@
+﻿@model IEnumerable<DarOasis.Models.Chambre>
+@{
+    ViewData["Title"] = "Chambres";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <div>
+        <h1 class="page-title">Gestion des <span>Chambres</span></h1>
+        <p class="page-subtitle">@Model.Count() chambre(s) enregistrée(s)</p>
+        <div class="title-divider"></div>
+    </div>
+    <a href="/Chambres/Create" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Nouvelle chambre
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div style="background:#EBF5DC;border:1px solid #B5D68A;border-radius:10px;
+        padding:12px 18px;margin-bottom:18px;color:#4A6B1E;font-size:13px;font-weight:600;">
+        ✓ @TempData["Success"]
+    </div>
+}
+
+<div class="card" style="padding:0;overflow:hidden;">
+    @if (!Model.Any())
+    {
+        <div style="text-align:center;padding:60px 20px;color:#9B7B5A;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#C8922A" stroke-width="1.5"
+                 style="display:block;margin:0 auto 12px;">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <p style="font-size:15px;font-weight:600;margin-bottom:4px;">Aucune chambre enregistrée</p>
+            <p style="font-size:13px;">Commencez par ajouter votre première chambre.</p>
+        </div>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Numéro</th>
+                    <th style="text-align:center;">Type</th>
+                    <th style="text-align:center;">Prix / Nuit</th>
+                    <th style="text-align:center;">Statut</th>
+                    <th style="text-align:center;">Note</th>
+                    <th style="text-align:center;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td style="font-weight:700;color:#5C3317;text-align:center;">
+                            @c.Numero
+                        </td>
+                        <td style="text-align:center;">@c.Type</td>
+                        <td style="font-weight:600;color:#C8922A;text-align:center;">@c.PrixParNuit.ToString("N2") TND</td>
+                        <td style="text-align:center;">
+                            @{
+                                var (bg, col) = c.Statut switch
+                                {
+                                    "disponible" => ("#EBF5DC", "#4A6B1E"),
+                                    "occupée" => ("#FFF0EC", "#A03A1E"),
+                                    "réservée" => ("#F5EDD6", "#8B5A2B"),
+                                    "nettoyage" => ("#EBF0DC", "#4A6B1E"),
+                                    "maintenance" => ("#F5E8E0", "#C47A5A"),
+                                    _ => ("#F5EDD6", "#8B5A2B")
+                                };
+                            }
+                            <span style="background:@bg;color:@col;padding:3px 12px;
+                                border-radius:20px;font-size:11px;font-weight:700;
+                                text-transform:uppercase;">
+                                @c.Statut
+                            </span>
+                        </td>
+                        <td style="text-align:center;">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <span style="color:@(i <= (int)c.Note ? "#C8922A" : "#EDE0C4");font-size:14px;">★</span>
+                            }
+                        </td>
+                        <td style="text-align:center;">
+                            <div style="display:flex;gap:6px;justify-content:flex-end;">
+                                <a href="/Chambres/Details/@c.IdChambre" class="btn btn-outline"
+                                   style="padding:6px 12px;font-size:12px;">Détails</a>
+                                <a href="/Chambres/Edit/@c.IdChambre"
+                                       class="btn"
+                                       style="
+                                    padding:6px 12px;
+                                    font-size:12px;
+                                    background:#6B7C3E;
+                                    color:white;
+                                    border:none;
+                                    border-radius:12px;
+                                    text-decoration:none;">
+                                    Modifier
+                                </a>
+                                <form asp-action="Delete"
+                                      asp-route-id="@c.IdChambre"
+                                      method="post"
+                                      style="display:inline;">
+
+                                    <button type="submit"
+                                            onclick="return confirm('Supprimer cette chambre ?')"
+                                            class="btn btn-danger"
+                                            style="padding:6px 12px;font-size:12px;">
+                                        Supprimer
+                                    </button>
+
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

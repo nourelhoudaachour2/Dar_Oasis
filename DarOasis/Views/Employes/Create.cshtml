@@ -1,0 +1,371 @@
+﻿@model DarOasis.Models.Employe
+
+@{
+    ViewData["Title"] = "Nouvel Employé";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Nouveau <span>Employé</span></h1>
+        <p>Ajouter un nouvel employé à Dar Oasis</p>
+        <div class="title-line"></div>
+    </div>
+</div>
+
+<div class="form-card">
+
+    <form asp-action="Create" enctype="multipart/form-data">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="image-section">
+
+            <img id="previewImage"
+                 src="~/images/employes/default.png"
+                 alt="preview" />
+
+            <label class="upload-btn">
+                Choisir une image
+
+                <input type="file"
+                       name="imageFile"
+                       accept="image/*"
+                       onchange="previewFile(event)"
+                       hidden />
+            </label>
+
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Nom</label>
+
+                <input asp-for="Nom" class="form-control" />
+
+                <span asp-validation-for="Nom" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Prénom</label>
+
+                <input asp-for="Prenom" class="form-control" />
+
+                <span asp-validation-for="Prenom" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Téléphone</label>
+
+                <input asp-for="Telephone" class="form-control" />
+
+                <span asp-validation-for="Telephone" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+
+                <input asp-for="Email" class="form-control" />
+
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Date de naissance</label>
+
+                <input asp-for="DateNaissance"
+                       type="date"
+                       class="form-control" />
+
+                <span asp-validation-for="DateNaissance" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Date d'embauche</label>
+
+                <input asp-for="DateEmbauche"
+                       type="date"
+                       class="form-control" />
+
+                <span asp-validation-for="DateEmbauche" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Poste</label>
+
+                <select asp-for="Poste"
+                        class="form-control"
+                        id="posteSelect">
+
+                    <option value="">-- Sélectionner --</option>
+
+                    <option value="Réceptionniste">
+                        Réceptionniste
+                    </option>
+
+                    <option value="Femme de ménage">
+                        Femme de ménage
+                    </option>
+
+                    <option value="Chef">
+                        Chef
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="Poste" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Salaire</label>
+
+                <input asp-for="Salaire"
+                       type="number"
+                       step="0.01"
+                       class="form-control" />
+
+                <span asp-validation-for="Salaire" class="text-danger"></span>
+            </div>
+
+            <div class="form-group full-width account-box"
+                 id="accountBox"
+                 style="display:none;">
+
+                <label class="checkbox-label">
+
+                    <input type="checkbox"
+                           name="CreerCompte"
+                           value="true" />
+
+                    Créer un compte système
+
+                </label>
+
+                <small>
+                    Uniquement pour le réceptionniste.
+                </small>
+
+            </div>
+
+            <div class="form-group full-width">
+                <label>Adresse</label>
+
+                <input asp-for="Adresse" class="form-control" />
+
+                <span asp-validation-for="Adresse" class="text-danger"></span>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Expérience</label>
+
+                <textarea asp-for="Experience"
+                          class="form-control textarea-custom"></textarea>
+
+                <span asp-validation-for="Experience" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div class="buttons">
+
+            <button type="submit" class="btn-save">
+                Enregistrer
+            </button>
+
+            <a asp-action="Index" class="btn-back">
+                Retour
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+<style>
+
+    .page-header {
+        margin-bottom: 22px;
+    }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #5b2d10;
+            margin-bottom: 3px;
+        }
+
+            .page-header h1 span {
+                color: #c9795d;
+            }
+
+        .page-header p {
+            color: #9b6b45;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+    .title-line {
+        width: 65px;
+        height: 4px;
+        background: #c98b2c;
+        border-radius: 20px;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 22px;
+        border: 1px solid #ead8b8;
+        max-width: 950px;
+    }
+
+    .image-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    #previewImage {
+        width: 95px;
+        height: 95px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #f1dfc1;
+        margin-bottom: 12px;
+    }
+
+    .upload-btn {
+        background: #6b350f;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .full-width {
+        grid-column: span 2;
+    }
+
+    .form-group label {
+        font-weight: 700;
+        color: #6b350f;
+        margin-bottom: 6px;
+        display: block;
+        font-size: 14px;
+    }
+
+    .form-control {
+        height: 44px;
+        border-radius: 13px;
+        border: 1px solid #e4cfac;
+        padding: 10px 14px;
+        font-size: 14px;
+        box-shadow: none !important;
+    }
+
+    .textarea-custom {
+        height: auto;
+        min-height: 80px;
+        resize: none;
+    }
+
+    .buttons {
+        margin-top: 22px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-save {
+        background: #7c9141;
+        color: white;
+        border: none;
+        padding: 9px 20px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .btn-back {
+        border: 2px solid #6b350f;
+        color: #6b350f;
+        background: white;
+        padding: 8px 20px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .account-box {
+        background: #fffaf2;
+        border: 1px solid #ead8b8;
+        border-radius: 14px;
+        padding: 14px;
+    }
+
+    .checkbox-label {
+        display: flex !important;
+        align-items: center;
+        gap: 10px;
+        color: #5b2d10 !important;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+        .checkbox-label input {
+            width: 17px;
+            height: 17px;
+        }
+
+    .account-box small {
+        color: #9b6b45;
+        margin-left: 28px;
+        font-size: 13px;
+    }
+
+</style>
+
+<script>
+
+    function previewFile(event) {
+
+        const reader = new FileReader();
+
+        reader.onload = function() {
+            document.getElementById('previewImage').src = reader.result;
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    const posteSelect = document.getElementById("posteSelect");
+    const accountBox = document.getElementById("accountBox");
+
+    posteSelect.addEventListener("change", function() {
+
+        if (this.value === "Réceptionniste") {
+            accountBox.style.display = "block";
+        }
+        else {
+            accountBox.style.display = "none";
+        }
+
+    });
+
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

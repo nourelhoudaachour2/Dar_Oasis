@@ -1,0 +1,209 @@
+﻿@model DarOasis.Models.Reservation
+
+@{
+    ViewData["Title"] = "Détails Réservation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+
+    <div>
+        <h1 class="page-title">Détails de la <span>Réservation</span></h1>
+        <p class="page-subtitle">
+            Réservation de @Model.Client.Nom @Model.Client.Prenom
+        </p>
+        <div class="title-divider"></div>
+    </div>
+
+    <a asp-action="Index" class="btn btn-outline">
+        Retour
+    </a>
+
+</div>
+
+<div class="card" style="max-width:900px;padding:34px;">
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;">
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Client</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">
+                @Model.Client.Nom @Model.Client.Prenom
+            </div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">CIN</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">
+                @Model.Client.NumeroIdentite
+            </div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Chambre</div>
+            <div style="font-size:18px;color:#C8922A;font-weight:800;margin-top:6px;">
+                @Model.Chambre.Numero
+            </div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Type chambre</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">
+                @Model.Chambre.Type
+            </div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Date début</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">
+                @Model.DateDebut.ToString("dd/MM/yyyy")
+            </div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Date fin</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">
+                @Model.DateFin.ToString("dd/MM/yyyy")
+            </div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Nombre de jours</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">
+                @Model.NombreJours
+            </div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Prix total</div>
+            <div style="font-size:18px;color:#6B7C3E;font-weight:800;margin-top:6px;">
+                @Model.PrixTotal.ToString("0.0") TND
+            </div>
+        </div>
+
+    </div>
+
+    <div style="margin-top:30px;">
+        <h3 style="color:#5C3317;font-size:20px;margin-bottom:14px;">
+            Accompagnants
+        </h3>
+
+        @if (Model.Accompagnants != null && Model.Accompagnants.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="text-align:center;">Nom</th>
+                        <th style="text-align:center;">Prénom</th>
+                        <th style="text-align:center;">Date naissance</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var a in Model.Accompagnants)
+                    {
+                        <tr>
+                            <td style="text-align:center;">@a.Nom</td>
+                            <td style="text-align:center;">@a.Prenom</td>
+                            <td style="text-align:center;">@a.DateNaissance.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p style="color:#9B7B5A;font-weight:600;">
+                Aucun accompagnant.
+            </p>
+        }
+    </div>
+    <div style="margin-top:30px;">
+
+        <h3 style="color:#5C3317;
+            font-size:20px;
+            margin-bottom:14px;">
+            Services supplémentaires
+        </h3>
+
+        @if (Model.ReservationServices != null
+            && Model.ReservationServices.Any())
+        {
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th style="text-align:center;">
+                            Service
+                        </th>
+
+                        <th style="text-align:center;">
+                            Prix / jour
+                        </th>
+
+                        <th style="text-align:center;">
+                            Jours
+                        </th>
+
+                        <th style="text-align:center;">
+                            Total
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var rs in Model.ReservationServices)
+                    {
+                        <tr>
+
+                            <td style="text-align:center;font-weight:700;">
+                                @rs.ServiceSupplementaire.NomService
+                            </td>
+
+                            <td style="text-align:center;">
+                                @rs.ServiceSupplementaire.PrixService.ToString("0.0") TND
+                            </td>
+
+                            <td style="text-align:center;">
+                                @rs.Quantite
+                            </td>
+
+                            <td style="text-align:center;
+                                color:#6B7C3E;
+                                font-weight:800;">
+
+                                @((rs.ServiceSupplementaire.PrixService * rs.Quantite).ToString("0.0")) TND
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        }
+        else
+        {
+            <p style="color:#9B7B5A;font-weight:600;">
+                Aucun service supplémentaire.
+            </p>
+        }
+
+    </div>
+
+    <div style="margin-top:28px;display:flex;gap:10px;">
+        <a asp-action="Edit"
+               asp-route-id="@Model.IdReservation"
+               class="btn"
+               style="background:#6B7C3E;color:white;border-radius:12px;">
+            Modifier
+        </a>
+
+        <a asp-action="Index" class="btn btn-outline">
+            Retour à la liste
+        </a>
+    </div>
+
+</div>

@@ -1,0 +1,447 @@
+﻿@{
+    ViewData["Title"] = "Dashboard Réceptionniste";
+
+    var reservations = ViewBag.ListeReservationsJour as dynamic;
+    var clients = ViewBag.ClientsRecents as dynamic;
+    var factures = ViewBag.FacturesEnAttente as dynamic;
+}
+
+<!-- HEADER -->
+<div style="margin-bottom:28px;">
+
+    <div style="font-size:32px;font-weight:700;color:#5C3317;line-height:1.2;">
+        Bienvenue, <span style="color:#C8922A;">@Context.Session.GetString("UserNom")</span>
+    </div>
+
+    <div style="font-size:14px;color:#9B7B5A;margin-top:6px;">
+        Dashboard Réceptionniste
+    </div>
+
+    <div class="title-divider"></div>
+
+</div>
+
+<!-- KPI -->
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px;">
+
+    <!-- Chambres -->
+    <div class="card" style="border-top:4px solid #6B7C3E;text-align:center;">
+
+        <div style="font-size:32px;font-weight:700;color:#6B7C3E;">
+            @ViewBag.TotalChambres
+        </div>
+
+        <div style="font-size:11px;color:#9B7B5A;text-transform:uppercase;margin-top:4px;">
+            Chambres
+        </div>
+
+        <div style="margin-top:10px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;">
+
+            <span style="
+                background:#EBF0DC;
+                color:#4A6B1E;
+                padding:3px 8px;
+                border-radius:10px;
+                font-size:10px;
+                font-weight:700;">
+
+                @ViewBag.ChambresDisponibles dispo
+
+            </span>
+
+            <span style="
+                background:#F5E8E0;
+                color:#A03A1E;
+                padding:3px 8px;
+                border-radius:10px;
+                font-size:10px;
+                font-weight:700;">
+
+                @ViewBag.ChambresOccupees occupées
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- Occupation -->
+    <div class="card" style="border-top:4px solid #C8922A;text-align:center;">
+
+        <div style="font-size:32px;font-weight:700;color:#C8922A;">
+            @ViewBag.TauxOccupation%
+        </div>
+
+        <div style="font-size:11px;color:#9B7B5A;text-transform:uppercase;margin-top:4px;">
+            Occupation
+        </div>
+
+        <div style="
+            margin-top:10px;
+            background:#F5EED8;
+            border-radius:10px;
+            height:6px;">
+
+            <div style="
+                background:#C8922A;
+                height:6px;
+                border-radius:10px;
+                width:@(ViewBag.TauxOccupation)%;">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Réservations -->
+    <div class="card" style="border-top:4px solid #5C3317;text-align:center;">
+
+        <div style="font-size:32px;font-weight:700;color:#5C3317;">
+            @ViewBag.ReservationsAujourdhui
+        </div>
+
+        <div style="font-size:11px;color:#9B7B5A;text-transform:uppercase;margin-top:4px;">
+            Réservations aujourd’hui
+        </div>
+
+    </div>
+
+    <!-- Départs -->
+    <div class="card" style="border-top:4px solid #C47A5A;text-align:center;">
+
+        <div style="font-size:32px;font-weight:700;color:#C47A5A;">
+            @ViewBag.DepartsAujourdhui
+        </div>
+
+        <div style="font-size:11px;color:#9B7B5A;text-transform:uppercase;margin-top:4px;">
+            Départs aujourd’hui
+        </div>
+
+    </div>
+
+    <!-- Factures -->
+    <div class="card" style="border-top:4px solid #8B5A2B;text-align:center;">
+
+        <div style="font-size:32px;font-weight:700;color:#8B5A2B;">
+            @ViewBag.FacturesNonPayees
+        </div>
+
+        <div style="font-size:11px;color:#9B7B5A;text-transform:uppercase;margin-top:4px;">
+            Factures non payées
+        </div>
+
+    </div>
+
+</div>
+
+<!-- TABLEAUX -->
+<div style="display:grid;grid-template-columns:1.2fr .8fr;gap:20px;">
+
+    <!-- Réservations -->
+    <div class="card">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:24px;">
+
+            <div style="
+                font-size:20px;
+                font-weight:700;
+                color:#5C3317;">
+
+                Réservations du jour
+
+            </div>
+
+            <div style="
+                font-size:13px;
+                color:#9B7B5A;
+                font-weight:600;">
+
+                Aujourd’hui
+
+            </div>
+
+        </div>
+
+        @if (reservations != null)
+        {
+            foreach (var r in reservations)
+            {
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    padding:18px 0;
+                    border-bottom:1px solid #F5EDD6;">
+
+                    <div style="display:flex;align-items:center;gap:14px;">
+
+                        <div style="
+                            width:12px;
+                            height:12px;
+                            border-radius:50%;
+                            background:#6B7C3E;">
+                        </div>
+
+                        <div>
+
+                            <div style="
+                                font-size:16px;
+                                font-weight:700;
+                                color:#3A2010;
+                                margin-bottom:6px;">
+
+                                @r.Client.Nom @r.Client.Prenom
+
+                            </div>
+
+                            <div style="
+                                display:flex;
+                                gap:8px;
+                                align-items:center;">
+
+                                <span style="
+                                    background:#EBF0DC;
+                                    color:#4A6B1E;
+                                    padding:4px 10px;
+                                    border-radius:10px;
+                                    font-size:11px;
+                                    font-weight:700;">
+
+                                    Chambre @r.Chambre.Numero
+
+                                </span>
+
+                                <span style="
+                                    background:#F5EED8;
+                                    color:#C8922A;
+                                    padding:4px 10px;
+                                    border-radius:10px;
+                                    font-size:11px;
+                                    font-weight:700;">
+
+                                    Confirmée
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+
+    </div>
+
+                   
+
+    <!-- Clients récents -->
+    <div class="card">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:24px;">
+
+            <div style="
+                font-size:20px;
+                font-weight:700;
+                color:#5C3317;">
+
+                Clients récents
+
+            </div>
+
+            <div style="
+                font-size:13px;
+                color:#9B7B5A;
+                font-weight:600;">
+
+                Derniers clients
+
+            </div>
+
+        </div>
+
+        @if (clients != null)
+        {
+            foreach (var c in clients)
+            {
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    padding:16px 0;
+                    border-bottom:1px solid #F5EDD6;">
+
+                    <div style="
+                        display:flex;
+                        align-items:center;
+                        gap:12px;">
+
+                        <div style="
+                            width:38px;
+                            height:38px;
+                            border-radius:50%;
+                            background:#F5EED8;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            color:#C8922A;
+                            font-weight:700;">
+
+                            @c.Nom.Substring(0, 1)
+
+                        </div>
+
+                        <div>
+
+                            <div style="
+                                font-size:15px;
+                                font-weight:700;
+                                color:#3A2010;">
+
+                                @c.Nom @c.Prenom
+
+                            </div>
+
+                            <div style="
+                                font-size:11px;
+                                color:#9B7B5A;
+                                margin-top:3px;">
+
+                                Client enregistré
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <span style="
+                        background:#F5EED8;
+                        color:#C8922A;
+                        padding:4px 10px;
+                        border-radius:10px;
+                        font-size:11px;
+                        font-weight:700;">
+
+                        Client
+
+                    </span>
+
+                </div>
+            }
+        }
+
+    </div>
+
+</div>
+
+<!-- FACTURES -->
+<div class="card" style="margin-top:20px;">
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:24px;">
+
+        <div style="
+            font-size:20px;
+            font-weight:700;
+            color:#5C3317;">
+
+            Factures en attente
+
+        </div>
+
+        <div style="
+            font-size:13px;
+            color:#9B7B5A;
+            font-weight:600;">
+
+            Paiements à suivre
+
+        </div>
+
+    </div>
+
+    @if (factures != null)
+    {
+        foreach (var f in factures)
+        {
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                padding:18px 0;
+                border-bottom:1px solid #F5EDD6;">
+
+                <!-- LEFT -->
+                <div>
+
+                    <div style="
+                        font-size:15px;
+                        font-weight:700;
+                        color:#3A2010;
+                        margin-bottom:4px;">
+
+                        @f.NumeroFacture
+
+                    </div>
+
+                    <div style="
+                        font-size:12px;
+                        color:#9B7B5A;">
+
+                        @f.DateFacture.ToString("dd/MM/yyyy")
+
+                    </div>
+
+                </div>
+
+                <!-- RIGHT -->
+                <div style="
+                    display:flex;
+                    align-items:center;
+                    gap:10px;">
+
+                    <span style="
+                        background:#FFF0EC;
+                        color:#A03A1E;
+                        padding:5px 12px;
+                        border-radius:10px;
+                        font-size:12px;
+                        font-weight:700;">
+
+                        @f.MontantTotal.ToString("N0") TND
+
+                    </span>
+
+                    <span style="
+                        background:#F5E8E0;
+                        color:#C47A5A;
+                        padding:5px 12px;
+                        border-radius:10px;
+                        font-size:12px;
+                        font-weight:700;">
+
+                        Non payé
+
+                    </span>
+
+                </div>
+
+            </div>
+        }
+    }
+
+</div>

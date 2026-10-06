@@ -1,0 +1,44 @@
+﻿@model DarOasis.Models.Facture
+
+@{
+    ViewData["Title"] = "Modifier Facture";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h1 class="page-title">Modifier <span>Facture</span></h1>
+    <p class="page-subtitle">Modifier uniquement le statut et la date d’échéance</p>
+    <div class="title-divider"></div>
+</div>
+
+<div class="card" style="max-width:700px;">
+
+    <form asp-action="Edit" method="post">
+
+        <input type="hidden" asp-for="IdFacture" />
+
+        <label class="form-label">Numéro facture</label>
+        <input asp-for="NumeroFacture" class="form-control" readonly />
+
+        <label class="form-label">Date d’échéance</label>
+        <input asp-for="DateEcheance" type="date" class="form-control" />
+
+        <label class="form-label">Statut</label>
+        <select asp-for="Statut" class="form-control">
+            <option value="Non payé">Non payé</option>
+            <option value="Payé">Payé</option>
+        </select>
+
+        <div style="margin-top:30px;display:flex;gap:12px;">
+            <button type="submit" class="btn btn-primary">
+                Enregistrer
+            </button>
+
+            <a href="/Factures/Index" class="btn btn-outline">
+                Retour
+            </a>
+        </div>
+
+    </form>
+
+</div>

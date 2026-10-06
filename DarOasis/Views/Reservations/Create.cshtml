@@ -1,0 +1,265 @@
+﻿@model DarOasis.ViewModels.ReservationCreateViewModel
+
+@{
+    ViewData["Title"] = "Nouvelle Réservation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+    <div>
+        <h1 class="page-title">Nouvelle <span>Réservation</span></h1>
+        <p class="page-subtitle">Créer une nouvelle réservation pour un client</p>
+        <div class="title-divider"></div>
+    </div>
+
+    <a asp-action="Index" class="btn btn-outline">Retour</a>
+</div>
+
+<div class="card" style="max-width:950px;padding:35px;">
+
+    <form asp-action="Create" method="post">
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <input type="hidden" asp-for="ClientId" id="ClientId" />
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+            <div>
+                <label asp-for="NumeroIdentite" class="form-label">CIN client</label>
+                <input asp-for="NumeroIdentite"
+                       id="NumeroIdentite"
+                       type="text"
+                       maxlength="8"
+                       pattern="\d{8}"
+                       oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+                       class="form-control"
+                       placeholder="Ex : 12345678" />
+                <span asp-validation-for="NumeroIdentite" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label class="form-label">Nom et prénom</label>
+                <input id="clientNomPrenom"
+                       class="form-control"
+                       readonly
+                       placeholder="Affichage automatique" />
+            </div>
+
+            <div>
+                <label asp-for="DateDebut" class="form-label">Date début</label>
+                <input asp-for="DateDebut"
+                       id="DateDebut"
+                       type="date"
+                       class="form-control" />
+                <span asp-validation-for="DateDebut" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="DateFin" class="form-label">Date fin</label>
+                <input asp-for="DateFin"
+                       id="DateFin"
+                       type="date"
+                       class="form-control" />
+                <span asp-validation-for="DateFin" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="NombrePersonnes" class="form-label">Nombre de personnes</label>
+                <input asp-for="NombrePersonnes"
+                       id="nombrePersonnes"
+                       type="number"
+                       min="1"
+                       class="form-control" />
+                <span asp-validation-for="NombrePersonnes" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="TypeChambre" class="form-label">Type de chambre</label>
+                <select asp-for="TypeChambre"
+                        id="TypeChambre"
+                        class="form-control"
+                        asp-items="Model.TypesChambres">
+                    <option value="">-- Sélectionner type chambre --</option>
+                </select>
+                <span asp-validation-for="TypeChambre" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="ChambreId" class="form-label">Chambre disponible</label>
+                <select asp-for="ChambreId"
+                        id="ChambreId"
+                        class="form-control">
+                    <option value="">-- Sélectionner chambre --</option>
+                </select>
+                <span asp-validation-for="ChambreId" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div style="margin-top:28px;">
+            <h3 style="color:#5C3317;font-size:18px;margin-bottom:14px;">
+                Accompagnants
+            </h3>
+
+            <div id="accompagnantsContainer"></div>
+        </div>
+        <div style="margin-top:28px;">
+
+            <h3 style="color:#5C3317;
+                font-size:18px;
+                margin-bottom:14px;">
+                Services supplémentaires
+            </h3>
+
+            @if (Model.ServicesDisponibles != null && Model.ServicesDisponibles.Any())
+            {
+                <div style="display:grid;
+                    grid-template-columns:repeat(2,1fr);
+                    gap:12px;">
+
+                    @foreach (var service in Model.ServicesDisponibles)
+                    {
+                        <label style="background:#FBF8F2;
+                            border:1px solid #EDE0C4;
+                            border-radius:14px;
+                            padding:14px;
+                            display:flex;
+                            align-items:center;
+                            gap:10px;
+                            cursor:pointer;">
+
+                            <input type="checkbox"
+                                   name="ServicesIds"
+                                   value="@service.IdService" />
+
+                            <span style="font-weight:700;
+                                color:#5C3317;">
+                                @service.NomService
+                            </span>
+
+                            <span style="margin-left:auto;
+                                color:#C8922A;
+                                font-weight:800;">
+                                @service.PrixService.ToString("0.0") TND / jour
+                            </span>
+
+                        </label>
+                    }
+                </div>
+            }
+
+        </div>
+
+        <div style="margin-top:32px;display:flex;gap:10px;">
+            <button type="submit"
+                    style="background:#7A4419;color:white;border:none;padding:14px 28px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;">
+                + Ajouter la réservation
+            </button>
+
+            <a asp-action="Index" class="btn btn-outline">Annuler</a>
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        const nombreInput = document.getElementById("nombrePersonnes");
+        const container = document.getElementById("accompagnantsContainer");
+
+        function genererAccompagnants() {
+            container.innerHTML = "";
+
+            let nombre = parseInt(nombreInput.value);
+
+            if (isNaN(nombre) || nombre <= 1) {
+                return;
+            }
+
+            let nombreAccompagnants = nombre - 1;
+
+            for (let i = 0; i < nombreAccompagnants; i++) {
+                container.innerHTML += `
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:16px;">
+                                <div>
+                                    <label class="form-label">Nom accompagnant ${i + 1}</label>
+                                    <input name="Accompagnants[${i}].Nom" class="form-control" />
+                                </div>
+
+                                <div>
+                                    <label class="form-label">Prénom accompagnant ${i + 1}</label>
+                                    <input name="Accompagnants[${i}].Prenom" class="form-control" />
+                                </div>
+
+                                <div>
+                                    <label class="form-label">Date naissance</label>
+                                    <input name="Accompagnants[${i}].DateNaissance" type="date" class="form-control" />
+                                </div>
+                            </div>
+                        `;
+            }
+        }
+
+        nombreInput.addEventListener("input", genererAccompagnants);
+        genererAccompagnants();
+
+        const cinInput = document.getElementById("NumeroIdentite");
+        const clientInput = document.getElementById("clientNomPrenom");
+        const clientIdInput = document.getElementById("ClientId");
+
+        cinInput.addEventListener("input", async function() {
+            if (this.value.length === 8) {
+                const response = await fetch(`/Reservations/GetClientByCin?cin=${this.value}`);
+
+                if (response.ok) {
+                    const client = await response.json();
+                    clientInput.value = client.nom + " " + client.prenom;
+                    clientIdInput.value = client.id;
+                } else {
+                    clientInput.value = "Client introuvable";
+                    clientIdInput.value = "";
+                }
+            } else {
+                clientInput.value = "";
+                clientIdInput.value = "";
+            }
+        });
+
+        const typeInput = document.getElementById("TypeChambre");
+        const dateDebutInput = document.getElementById("DateDebut");
+        const dateFinInput = document.getElementById("DateFin");
+        const chambreSelect = document.getElementById("ChambreId");
+
+        async function chargerChambresDisponibles() {
+            const type = typeInput.value;
+            const dateDebut = dateDebutInput.value;
+            const dateFin = dateFinInput.value;
+
+            if (!type || !dateDebut || !dateFin) {
+                return;
+            }
+
+            const response = await fetch(`/Reservations/GetChambresDisponibles?type=${type}&dateDebut=${dateDebut}&dateFin=${dateFin}`);
+
+            chambreSelect.innerHTML = '<option value="">-- Sélectionner chambre --</option>';
+
+            if (response.ok) {
+                const chambres = await response.json();
+
+                chambres.forEach(chambre => {
+                    chambreSelect.innerHTML += `<option value="${chambre.idChambre}">${chambre.numero}</option>`;
+                });
+            }
+        }
+
+        typeInput.addEventListener("change", chargerChambresDisponibles);
+        dateDebutInput.addEventListener("change", chargerChambresDisponibles);
+        dateFinInput.addEventListener("change", chargerChambresDisponibles);
+    </script>
+}

@@ -1,0 +1,183 @@
+﻿@model DarOasis.Models.Client
+
+@{
+    ViewData["Title"] = "Détails Client";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+
+    <div>
+        <h1 class="page-title">Détails du <span>Client</span></h1>
+        <p class="page-subtitle">Informations complètes de @Model.Nom @Model.Prenom</p>
+        <div class="title-divider"></div>
+    </div>
+
+    <a asp-action="Index" class="btn btn-outline">
+        Retour
+    </a>
+
+</div>
+
+<div class="card" style="max-width:850px;padding:34px;">
+
+    <div style="margin-bottom:28px;">
+        <div style="font-size:13px;color:#9B7B5A;text-transform:uppercase;font-weight:700;">
+            Client
+        </div>
+
+        <div style="font-size:36px;font-weight:800;color:#5C3317;margin-top:6px;">
+            @Model.Nom @Model.Prenom
+        </div>
+
+        <div style="margin-top:10px;">
+            <span style="background:#F5EDD6;color:#8B5A2B;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:800;">
+                @Model.TypePieceIdentite : @Model.NumeroIdentite
+            </span>
+        </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;">
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Téléphone</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">@Model.Telephone</div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Email</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">@Model.Email</div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Nationalité</div>
+            <div style="font-size:18px;color:#6B7C3E;font-weight:800;margin-top:6px;">@Model.Nationalite</div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Adresse</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">@Model.Adresse</div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Type pièce identité</div>
+            <div style="font-size:18px;color:#3A2010;font-weight:700;margin-top:6px;">@Model.TypePieceIdentite</div>
+        </div>
+
+        <div style="background:#FBF8F2;border:1px solid #EDE0C4;border-radius:14px;padding:18px;">
+            <div style="font-size:12px;color:#9B7B5A;font-weight:700;text-transform:uppercase;">Numéro identité</div>
+            <div style="font-size:18px;color:#C8922A;font-weight:800;margin-top:6px;">@Model.NumeroIdentite</div>
+        </div>
+
+    </div>
+    <div style="margin-top:34px;">
+        <h2 style="color:#5C3317;font-size:24px;margin-bottom:16px;">
+            Historique des réservations
+        </h2>
+
+        @if (Model.Reservations != null && Model.Reservations.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="text-align:center;">Chambre</th>
+                        <th style="text-align:center;">Date début</th>
+                        <th style="text-align:center;">Date fin</th>
+                        <th style="text-align:center;">Jours</th>
+                        <th style="text-align:center;">Prix</th>
+                        <th style="text-align:center;">Facture</th>
+                        <th style="text-align:center;">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var r in Model.Reservations)
+                    {
+                        <tr>
+                            <td style="text-align:center;font-weight:700;color:#C8922A;">
+                                @r.Chambre.Numero
+                            </td>
+
+                            <td style="text-align:center;">
+                                @r.DateDebut.ToString("dd/MM/yyyy")
+                            </td>
+
+                            <td style="text-align:center;">
+                                @r.DateFin.ToString("dd/MM/yyyy")
+                            </td>
+
+                            <td style="text-align:center;">
+                                @r.NombreJours
+                            </td>
+
+                            <td style="text-align:center;font-weight:700;color:#6B7C3E;">
+                                @r.PrixTotal.ToString("0.0") TND
+                            </td>
+
+                            <td style="text-align:center;">
+                                @if (r.Facture != null)
+                                {
+                                    if (r.Facture.Statut == "Payé")
+                                    {
+                                        <span style="background:#EBF5DC;color:#4A6B1E;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;">
+                                            Payé
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span style="background:#FFF0EC;color:#A03A1E;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;">
+                                            Non payé
+                                        </span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span style="color:#9B7B5A;">Aucune</span>
+                                }
+                            </td>
+
+                            <td style="text-align:center;">
+                                <div style="display:flex;gap:6px;justify-content:center;">
+                                    <a href="/Reservations/Details/@r.IdReservation"
+                                           class="btn btn-outline"
+                                           style="padding:6px 12px;font-size:12px;">
+                                        Réservation
+                                    </a>
+
+                                    @if (r.Facture != null)
+                                    {
+                                        <a href="/Factures/Details/@r.Facture.IdFacture"
+                                               class="btn"
+                                               style="padding:6px 12px;font-size:12px;background:#6B7C3E;color:white;border-radius:12px;text-decoration:none;">
+                                            Facture
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p style="color:#9B7B5A;font-weight:600;">
+                Aucun historique de réservation pour ce client.
+            </p>
+        }
+    </div>
+
+    <div style="margin-top:28px;display:flex;gap:10px;">
+        <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn"
+               style="background:#6B7C3E;color:white;border-radius:12px;">
+            Modifier
+        </a>
+
+        <a asp-action="Index" class="btn btn-outline">
+            Retour à la liste
+        </a>
+    </div>
+
+</div>
